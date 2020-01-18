@@ -6,6 +6,7 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.Ignore
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.squareup.moshi.JsonQualifier
 
 @JsonClass(generateAdapter = true)
 @Entity(tableName = "repositories", foreignKeys = [ForeignKey(
@@ -17,10 +18,8 @@ import com.squareup.moshi.JsonClass
 data class UserRepository (
     val name: String,
     val private: Boolean,
-    @J
-    val ownerId: Int,
-    @Ignore
-    val owner: GithubRepositoryOwner,
+    @Transient val ownerId: Int = 0,
+    @Ignore val owner: GithubRepositoryOwner,
     @Json(name = "created_at") val createdAt: String,
     @Json(name = "updated_at") val updatedAt: String,
     @Json(name = "pushed_at") val pushedAt: String,
