@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.githubrepositories.R
 import com.example.githubrepositories.adapters.RepoAdapter
 import com.example.githubrepositories.response.UserRepository
@@ -26,6 +27,9 @@ class RepositoriesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Glide.with(this)
+            .load(repositoriesList[0].owner.avatarUrl)
+            .into(avatar_img)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.adapter = RepoAdapter(repositoriesList)
     }

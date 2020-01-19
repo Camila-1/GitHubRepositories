@@ -24,6 +24,7 @@ data class UserRepository (
     @Json(name = "updated_at") val updatedAt: String,
     @Json(name = "pushed_at") val pushedAt: String,
     @Json(name = "stargazers_count") val stargazersCount: Int,
+    @Json(name = "forks_count") val forksCount: Int,
     @Json(name = "watchers_count") val watchersCount: Int,
     val language: String?
 )

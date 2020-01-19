@@ -8,9 +8,9 @@ import kotlinx.coroutines.withContext
 class GitHubAPIRequest(context: Context) {
     private val serviceBuilder = GitHubServiceBuilder(context)
 
-    suspend fun repositories(): List<UserRepository>? {
+    suspend fun repositories(login: String): List<UserRepository>? {
         return withContext(Dispatchers.IO) {
-            serviceBuilder.gitHubService().repositoriesByUserName("Camila-1").execute().body()
+            serviceBuilder.gitHubService().repositoriesByUserName(login).execute().body()
         }
     }
 }

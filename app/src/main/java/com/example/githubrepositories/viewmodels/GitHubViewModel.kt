@@ -6,7 +6,7 @@ import com.example.githubrepositories.response.UserRepository
 
 class GitHubViewModel(private val repository: GitHubRepository): ViewModel() {
 
-    suspend fun getRepositories(): List<UserRepository>? {
-        return repository.repositoriesList()
+    suspend fun getRepositories(login: String): List<UserRepository>? {
+        return repository.repositoriesList(login)
     }
 }

@@ -12,6 +12,9 @@ class RepoAdapter(private val items: List<UserRepository>) : RecyclerView.Adapte
     inner class RepoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: UserRepository) = with(itemView){
             project_name.text = item.name
+            language.text = item.language
+            stargazersCount.text = item.stargazersCount.toString()
+            forksCount.text = item.forksCount.toString()
         }
     }
 

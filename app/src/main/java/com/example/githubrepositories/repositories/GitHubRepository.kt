@@ -6,7 +6,7 @@ import com.example.githubrepositories.services.githubrepositoriesservice.GitHubA
 
 class GitHubRepository(val context: Context) {
 
-    suspend fun repositoriesList() : List<UserRepository>? {
-        return GitHubAPIRequest(context).repositories()
+    suspend fun repositoriesList(login: String) : List<UserRepository>? {
+        return GitHubAPIRequest(context).repositories(login)
     }
 }
