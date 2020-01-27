@@ -7,36 +7,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.githubrepositories.R
+import com.example.githubrepositories.activities.MainActivity
 import com.example.githubrepositories.adapters.RepoAdapter
+import com.example.githubrepositories.repositories.GitHubRepository
+import com.example.githubrepositories.response.GithubRepositoryOwner
 import com.example.githubrepositories.response.UserRepository
+import com.example.githubrepositories.viewmodels.GitHubViewModel
+import com.example.githubrepositories.viewmodels.GitHubViewModelFactory
 import kotlinx.android.synthetic.main.fragment_repositories_list.*
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class RepositoriesListFragment : Fragment() {
 
-    private var repositoriesList: List<UserRepository> = emptyList()
+    private var user: GithubRepositoryOwner? = null
+    private var repositoriesList: List<UserRepository>? = emptyList()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        user = arguments?.getParcelable("user")
+        repositoriesList = arguments?.getParcelableArrayList("list")
         return inflater.inflate(R.layout.fragment_repositories_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Glide.with(this)
-            .load(repositoriesList[0].owner.avatarUrl)
-            .into(avatar_img)
+        GlobalScope.launch(Dispatchers.Main) {
+            Glide.with(this@RepositoriesListFragment)
+                .load(user?.avatarUrl)
+                .into(avatar_img)
+
         recycler_view.layoutManager = LinearLayoutManager(context)
-        recycler_view.adapter = RepoAdapter(repositoriesList)
+        recycler_view.adapter = if (repositoriesList == null) RepoAdapter(emptyList())
+        else RepoAdapter(repositoriesList!!)
+        }
     }
 
     companion object{
-        fun newInstance(response: List<UserRepository>): Fragment = RepositoriesListFragment().apply {
-            repositoriesList = response
+        fun newInstance(repositories: List<UserRepository>, user: GithubRepositoryOwner?): Fragment = RepositoriesListFragment().apply {
+            arguments = bundleOf("list" to repositories, "user" to user)
         }
     }
 }

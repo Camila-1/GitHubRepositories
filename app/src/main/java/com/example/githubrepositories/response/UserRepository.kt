@@ -1,30 +1,38 @@
 package com.example.githubrepositories.response
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import android.os.Parcelable
+import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.Ignore
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.JsonQualifier
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @JsonClass(generateAdapter = true)
-@Entity(tableName = "repositories", foreignKeys = [ForeignKey(
+@Entity(indices = [Index("owner_id")],
+    tableName = "repositories",
+    foreignKeys = [ForeignKey(
     entity = GithubRepositoryOwner::class,
     parentColumns = ["id"],
-    childColumns = ["ownerId"],
+    childColumns = ["owner_id"],
     onDelete = CASCADE)]
     )
 data class UserRepository (
-    val name: String,
-    val private: Boolean,
-    @Transient val ownerId: Int = 0,
-    @Ignore val owner: GithubRepositoryOwner,
-    @Json(name = "created_at") val createdAt: String,
-    @Json(name = "updated_at") val updatedAt: String,
-    @Json(name = "pushed_at") val pushedAt: String,
-    @Json(name = "stargazers_count") val stargazersCount: Int,
-    @Json(name = "forks_count") val forksCount: Int,
-    @Json(name = "watchers_count") val watchersCount: Int,
-    val language: String?
-)
+    @PrimaryKey
+    var id: Int = 0,
+    var name: String = "",
+    var private: Boolean = false,
+    @Transient @ColumnInfo(name = "owner_id") var ownerId: Int = 0,
+    @Ignore var owner: GithubRepositoryOwner? = null,
+    @Json(name = "created_at") var createdAt: String = "",
+    @Json(name = "updated_at") var updatedAt: String = "",
+    @Json(name = "pushed_at") var pushedAt: String = "",
+    @Json(name = "stargazers_count") var stargazersCount: Int = 0,
+    @Json(name = "forks_count") var forksCount: Int = 0,
+    @Json(name = "watchers_count") var watchersCount: Int = 0,
+    var language: String? = ""
+): Parcelable {
+    init {
+        ownerId = owner?.id ?: 0
+    }
+}

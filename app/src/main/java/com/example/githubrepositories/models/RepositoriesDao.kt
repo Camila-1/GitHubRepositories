@@ -10,8 +10,8 @@ import com.example.githubrepositories.response.UserRepository
 interface RepositoriesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(list: List<UserRepository>)
+    suspend fun insert(list: List<UserRepository>?)
 
-    @Query("SELECT * FROM repositories WHERE ownerId = :ownerId")
-    suspend fun repositories(ownerId: Int): List<UserRepository>
+    @Query("SELECT * FROM repositories WHERE owner_id = :ownerId")
+    suspend fun repositories(ownerId: Long): List<UserRepository>
 }
